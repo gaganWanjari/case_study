@@ -1,0 +1,34 @@
+<project name="PassengerManagementSystem" basedir="." default="run">
+    <description>Build and Run Passenger Management System</description>
+
+    <property name="src.dir" location="src"/>
+    <property name="web.dir" location="web"/>
+    <property name="build.dir" location="build"/>
+    <property name="webinf.dir" location="${web.dir}/WEB-INF"/>
+    <property name="classes.dir" location="${build.dir}/classes"/>
+    <property name="lib.dir" location="${webinf.dir}/lib"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" classpathref="classpath"/>
+    </target>
+
+    <target name="run" depends="compile">
+        <copy todir="${webinf.dir}/classes">
+            <fileset dir="${classes.dir}"/>
+        </copy>
+        <java fork="true" classname="org.apache.catalina.startup.Bootstrap" classpathref="classpath">
+            <arg value="start"/>
+        </java>
+    </target>
+</project>
